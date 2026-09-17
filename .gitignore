@@ -4,3 +4,7 @@ __pycache__/
 .env
 .vscode/
 .idea/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.db
