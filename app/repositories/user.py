@@ -5,11 +5,11 @@
 
 from typing import Annotated
 
-from db.session import SessionDep
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.db.session import SessionDep
 from app.models.user import User
 from app.schemas.user import SUserCreate
 
