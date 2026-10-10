@@ -1,5 +1,7 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Depends, status
 
+from app.api.deps import get_current_user
+from app.models.user import User
 from app.schemas.user import SUserCreate, SUserResponse
 from app.services.user import ServiceDep
 
@@ -13,6 +15,11 @@ router = APIRouter(prefix="/users", tags=["Users"])
 )
 async def register_user(payload: SUserCreate, service: ServiceDep):
     return await service.register(payload)
+
+
+@router.get("/me", response_model=SUserResponse)
+async def get_me(current: User = Depends(get_current_user)):
+    return current
 
 
 @router.get("/{user_id}", response_model=SUserResponse)
