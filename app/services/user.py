@@ -2,9 +2,10 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
 
-from app.core.security import hash_password
+from app.core.security import create_access_token, hash_password, verify_password
 from app.models.user import User
 from app.repositories.user import RepoDep, UserRepository
+from app.schemas.token import LoginRequest, TokenResponse
 from app.schemas.user import SUserCreate
 
 
@@ -67,6 +68,24 @@ class UserService:
         """
 
         return await self.repo.list(skip=skip, limit=limit)
+
+    async def authenticate(self, data: LoginRequest) -> TokenResponse:
+        user = await self.repo.get_by_email(data.email)
+
+        if not user or not verify_password(data.password, user.hashed_password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid email or password",
+            )
+
+        if not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User is inactive",
+            )
+
+        token = create_access_token(subject=user.id)
+        return TokenResponse(access_token=token)
 
 
 async def get_user_service(repo: RepoDep) -> UserService:
