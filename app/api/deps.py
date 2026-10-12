@@ -3,14 +3,14 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.core.security import decode_token
 from app.models.user import User
-from app.repositories.user import RepoDep
+from app.repositories.user import UserRepoDep
 
 # tokenUrl — только для Swagger UI, чтобы появилась кнопка "Authorize"
 bearer_scheme = HTTPBearer()
 
 
 async def get_current_user(
-    repo: RepoDep,
+    repo: UserRepoDep,
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
 ) -> User:
 

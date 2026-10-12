@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, status
 
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models.user import User
-from app.repositories.user import RepoDep, UserRepository
+from app.repositories.user import UserRepoDep, UserRepository
 from app.schemas.token import LoginRequest, TokenResponse
 from app.schemas.user import SUserCreate
 
@@ -88,8 +88,8 @@ class UserService:
         return TokenResponse(access_token=token)
 
 
-async def get_user_service(repo: RepoDep) -> UserService:
+async def get_user_service(repo: UserRepoDep) -> UserService:
     return UserService(repo)
 
 
-ServiceDep = Annotated[UserService, Depends(get_user_service)]
+UserServiceDep = Annotated[UserService, Depends(get_user_service)]

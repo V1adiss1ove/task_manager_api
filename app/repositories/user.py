@@ -86,4 +86,4 @@ async def get_user_repository(session: SessionDep) -> UserRepository:
     return UserRepository(session)
 
 
-RepoDep = Annotated[UserRepository, Depends(get_user_repository)]
+UserRepoDep = Annotated[UserRepository, Depends(get_user_repository)]
