@@ -39,7 +39,7 @@ class TaskRepository:
         return list(result.scalars().all())
 
     async def create(self, data: TaskCreate, user_id: int) -> Task:
-        task = Task(data.name, data.description, user_id=user_id)
+        task = Task(name=data.name, description=data.description, user_id=user_id)
 
         self.session.add(task)
         await self.session.commit()
@@ -48,7 +48,7 @@ class TaskRepository:
         return task
 
     async def update(self, task: Task, data: TaskUpdate) -> Task:
-        for field, value in data.model_dump(exclude_unset=True):
+        for field, value in data.model_dump(exclude_unset=True).items():
             setattr(task, field, value)
 
         await self.session.commit()
