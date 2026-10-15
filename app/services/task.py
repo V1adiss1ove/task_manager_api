@@ -36,7 +36,7 @@ class TaskService:
         return await self.repo.create(data=data, user_id=user_id)
 
     async def update(self, data: TaskUpdate, task_id: int, user_id: int):
-        task = self.repo.get(task_id=task_id, user_id=user_id)
+        task = await self.repo.get(task_id=task_id, user_id=user_id)
         return await self.repo.update(task=task, data=data)
 
     async def delete(self, task_id: int, user_id: int) -> None:
