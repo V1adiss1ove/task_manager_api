@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
@@ -11,7 +13,7 @@ bearer_scheme = HTTPBearer()
 
 async def get_current_user(
     repo: UserRepoDep,
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)],
 ) -> User:
 
     credentials_exc = HTTPException(
@@ -34,3 +36,6 @@ async def get_current_user(
         raise credentials_exc
 
     return user
+
+
+CurrUserDep = Annotated[User, Depends(get_current_user)]
